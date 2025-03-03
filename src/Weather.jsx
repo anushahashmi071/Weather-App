@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 
 const Weather = () => {
   const [weather, setWeather] = useState(false);
-  const inputRef = useRef(null);
+  const inputRef = useRef("");
 
   const allIcons = {
     "01d": "https://openweathermap.org/img/wn/01d@2x.png",
