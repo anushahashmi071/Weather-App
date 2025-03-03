@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 
 const Weather = () => {
   const [weather, setWeather] = useState(false);
+  const inputRef = useRef(null);
 
   const allIcons = {
     "01d": "https://openweathermap.org/img/wn/01d@2x.png",
@@ -26,33 +27,33 @@ const Weather = () => {
     "10n": "https://openweathermap.org/img/wn/10n@2x.png",
   };
 
-  const inputRef = useRef();
   const apiKey = import.meta.env.VITE_API_KEY;
   const getWeather = async (city) => {
     if (city === "") {
-      alert("Enter a City");
+      alert("It doesn't accept empty input.. :)");
     }
 
     const response = await fetch(
       `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`
     );
 
-    // if (!response.ok) {
-    //   alert(data.message)      
-    // }
-
     const data = await response.json();
-    console.log(data);
-    
+
     const icon = allIcons[data.weather[0].icon];
     setWeather({
-      humidity: data.main.humidity,
-      windSpeed: data.wind.speed,
-      tempurature: Math.floor(data.main.temp),
-      loction: data.name,
-      code: data.sys.country,
+      humidity: data?.main?.humidity,
+      windSpeed: data?.wind?.speed,
+      tempurature: Math.ceil(data?.main?.temp),
+      loction: data?.name,
+      code: data?.sys?.country,
+      description: data?.weather[0]?.description,
       icon: icon,
     });
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault(); // Prevents page refresh
+    getWeather(inputRef.current.value); // Calls function when Enter is pressed
   };
 
   useEffect(() => {
@@ -62,19 +63,23 @@ const Weather = () => {
   return (
     <div className="weather">
       <h1>Weather App</h1>
-      <div className="searchBar">
-        <input ref={inputRef} type="text" placeholder="Search" />
+      <form className="searchBar" onSubmit={handleSubmit}>
+        <input ref={inputRef} type="text" placeholder="Enter a Location" />
         <img
           className="searchIcon"
           src="./src/assets/search.png"
+          alt="Search Icon"
           onClick={() => getWeather(inputRef.current.value)}
         />
-      </div>
+      </form>
       {weather ? (
         <>
           <img src={weather.icon} alt="" className="weatherIcon" />
-          <p className="tempurature">{weather.tempurature} C</p>
-          <p className="location">{weather.loction} , {weather.code}</p>
+          <p className="tempurature">{weather.tempurature} &#186; C</p>
+          <p className="location">
+            {weather.loction} , {weather.code}
+          </p>
+          <p className="description">{weather.description}</p>
           <div className="weatherData">
             <div className="col">
               <img src="./src/assets/humidity.png" alt="" />
