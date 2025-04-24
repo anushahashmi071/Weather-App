@@ -56,7 +56,7 @@ body {
   transition: all ease-in-out 0.5s;
   width: 20vw;
   font-size: 18px;
-  cursor: pointer;
+  cursor: auto;
 }
 
 .searchBar input:focus {

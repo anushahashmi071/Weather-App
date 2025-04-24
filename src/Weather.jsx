@@ -1,30 +1,27 @@
 import React, { useEffect, useRef, useState } from "react";
+import humidityIcon from "./assets/humidity.png"
+import cloudSunIcon from "./assets/cloud_sun.png"
+import cloudIcon from "./assets/cloud.png"
+import windSpeedIcon from "./assets/windSpeed.png"
+import rainyIcon from "./assets/rainy.png"
+import searchIcon from "./assets/search.png"
+import snowFlakeIcon from "./assets/snowflake.png"
+import sunIcon from "./assets/sun.png"
+import thunderIcon from "./assets/thunder.png"
+import windyIcon from "./assets/windy.png"
 
 const Weather = () => {
   const [weather, setWeather] = useState(false);
   const inputRef = useRef("");
 
   const allIcons = {
-    "01d": "https://openweathermap.org/img/wn/01d@2x.png",
-    "01n": "https://openweathermap.org/img/wn/01n@2x.png",
-    "02d": "https://openweathermap.org/img/wn/02d@2x.png",
-    "02n": "https://openweathermap.org/img/wn/02n@2x.png",
-    "03d": "https://openweathermap.org/img/wn/03d@2x.png",
-    "03n": "https://openweathermap.org/img/wn/03n@2x.png",
-    "04d": "https://openweathermap.org/img/wn/04d@2x.png",
-    "04n": "https://openweathermap.org/img/wn/04n@2x.png",
-    "05d": "https://openweathermap.org/img/wn/05d@2x.png",
-    "05n": "https://openweathermap.org/img/wn/05n@2x.png",
-    "06d": "https://openweathermap.org/img/wn/06d@2x.png",
-    "06n": "https://openweathermap.org/img/wn/06n@2x.png",
-    "07d": "https://openweathermap.org/img/wn/07d@2x.png",
-    "07n": "https://openweathermap.org/img/wn/07n@2x.png",
-    "08d": "https://openweathermap.org/img/wn/08d@2x.png",
-    "08n": "https://openweathermap.org/img/wn/08n@2x.png",
-    "09d": "https://openweathermap.org/img/wn/09d@2x.png",
-    "09n": "https://openweathermap.org/img/wn/09n@2x.png",
-    "10d": "https://openweathermap.org/img/wn/10d@2x.png",
-    "10n": "https://openweathermap.org/img/wn/10n@2x.png",
+    icon1 : cloudSunIcon,
+    icon2 : cloudIcon,
+    icon3 : rainyIcon,
+    icon4 : snowFlakeIcon,
+    icon5 : sunIcon,
+    icon6 : thunderIcon,
+    icon7 : windyIcon
   };
 
   const apiKey = import.meta.env.VITE_API_KEY;
@@ -40,6 +37,8 @@ const Weather = () => {
     const data = await response.json();
 
     const icon = allIcons[data.weather[0].icon];
+    console.log();
+    
     setWeather({
       humidity: data?.main?.humidity,
       windSpeed: data?.wind?.speed,
@@ -47,7 +46,7 @@ const Weather = () => {
       loction: data?.name,
       code: data?.sys?.country,
       description: data?.weather[0]?.description,
-      icon: icon,
+      icon: icon
     });
   };
 
@@ -57,7 +56,7 @@ const Weather = () => {
   };
 
   useEffect(() => {
-    getWeather();
+    getWeather("Pakistan");
   });
 
   return (
@@ -67,7 +66,7 @@ const Weather = () => {
         <input ref={inputRef} type="text" placeholder="Enter a Location" />
         <img
           className="searchIcon"
-          src="./src/assets/search.png"
+          src={searchIcon}
           alt="Search Icon"
           onClick={() => getWeather(inputRef.current.value)}
         />
@@ -82,14 +81,14 @@ const Weather = () => {
           <p className="description">{weather.description}</p>
           <div className="weatherData">
             <div className="col">
-              <img src="./src/assets/humidity.png" alt="" />
+              <img src={humidityIcon} alt="" />
               <div>
                 <p>{weather.humidity} %</p>
                 <span>Humidity</span>
               </div>
             </div>
             <div className="col">
-              <img src="./src/assets/windy.png" alt="" />
+              <img src={windSpeedIcon} alt="" />
               <div>
                 <p>{weather.windSpeed} Km/h</p>
                 <span>Wind Speed</span>
