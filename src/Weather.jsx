@@ -1,33 +1,46 @@
 import React, { useEffect, useRef, useState } from "react";
-import humidityIcon from "./assets/humidity.png"
-import cloudSunIcon from "./assets/cloud_sun.png"
-import cloudIcon from "./assets/cloud.png"
-import windSpeedIcon from "./assets/windSpeed.png"
+import clearSkyIcon from "./assets/clearSky.png"
+import nightSkyIcon from "./assets/nightSky.png"
+import fewCloudIcon from "./assets/fewCloud.png"
+import cloudIcon from "./assets/cloud.png" 
 import rainyIcon from "./assets/rainy.png"
+import showerRainIcon from "./assets/showerRain.png"
 import searchIcon from "./assets/search.png"
 import snowFlakeIcon from "./assets/snowflake.png"
-import sunIcon from "./assets/sun.png"
+import mistIcon from "./assets/mist.png"
 import thunderIcon from "./assets/thunder.png"
+import brokenCloudIcon from "./assets/brokenCloud.png"
 import windyIcon from "./assets/windy.png"
 
 const Weather = () => {
-  const [weather, setWeather] = useState(false);
+  const [weather, setWeather] = useState(null);
   const inputRef = useRef("");
 
   const allIcons = {
-    icon1 : cloudSunIcon,
-    icon2 : cloudIcon,
-    icon3 : rainyIcon,
-    icon4 : snowFlakeIcon,
-    icon5 : sunIcon,
-    icon6 : thunderIcon,
-    icon7 : windyIcon
+    "01d" : clearSkyIcon,
+    "01n" : nightSkyIcon,
+    "02d" : fewCloudIcon,
+    "02n" : fewCloudIcon,
+    "03d" : cloudIcon,
+    "03n" : cloudIcon,
+    "04d" : brokenCloudIcon,
+    "04n" : brokenCloudIcon,
+    "09d" : showerRainIcon,
+    "09n" : showerRainIcon,
+    "10d" : rainyIcon,
+    "10n" : rainyIcon,
+    "11d" : thunderIcon,
+    "11n" : thunderIcon,
+    "30d" : snowFlakeIcon,
+    "30n" : snowFlakeIcon,
+    "50d" : mistIcon,
+    "50n" : mistIcon
   };
 
   const apiKey = import.meta.env.VITE_API_KEY;
   const getWeather = async (city) => {
     if (city === "") {
-      alert("It doesn't accept empty input.. :)");
+      alert("Please!!! Enter the city name. It doesn't accept empty input.. :)");
     }
 
     const response = await fetch(
@@ -36,7 +49,11 @@ const Weather = () => {
 
     const data = await response.json();
 
-    const icon = allIcons[data.weather[0].icon];
+    if(!response.ok){
+      alert(data.message)
+    }
+
+    const icon = allIcons[data.weather[0].icon] || clearSkyIcon ;
     console.log();
     
     setWeather({
@@ -55,9 +72,9 @@ const Weather = () => {
     getWeather(inputRef.current.value); // Calls function when Enter is pressed
   };
 
-  useEffect(() => {
-    getWeather("Pakistan");
-  });
+  // useEffect(() => {
+  //   getWeather("pakistan");
+  // },[]);
 
   return (
     <div className="weather">
@@ -73,7 +90,7 @@ const Weather = () => {
       </form>
       {weather ? (
         <>
-          <img src={weather.icon} alt="" className="weatherIcon" />
+          <img src={weather.icon} alt={weather.icon} className="weatherIcon" width={100} height={100} />
           <p className="tempurature">{weather.tempurature} &#186; C</p>
           <p className="location">
             {weather.loction} , {weather.code}
@@ -81,14 +98,14 @@ const Weather = () => {
           <p className="description">{weather.description}</p>
           <div className="weatherData">
             <div className="col">
-              <img src={humidityIcon} alt="" />
+              <img src={mistIcon} alt="" />
               <div>
                 <p>{weather.humidity} %</p>
                 <span>Humidity</span>
               </div>
             </div>
             <div className="col">
-              <img src={windSpeedIcon} alt="" />
+              <img src={windyIcon} alt="" />
               <div>
                 <p>{weather.windSpeed} Km/h</p>
                 <span>Wind Speed</span>
